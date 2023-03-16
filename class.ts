@@ -7,6 +7,11 @@ class Department {
     // this.name = n;
   }
 
+  //Static Method
+  static createEmployee(name: string) {
+    return { name: name };
+  }
+
   describe(this: Department) {
     console.log(`Department (${this.name})`);
   }
@@ -31,8 +36,18 @@ class ITDepartment extends Department {
 }
 
 class AccountingDepartment extends Department {
+  private lastReport: string;
+
+  get mostRecentReport() {
+    if (this.lastReport) {
+      return this.lastReport;
+    }
+    throw new Error("No report found");
+  }
+
   constructor(private reports: string[]) {
     super("Accounting");
+    this.lastReport = reports[0];
   }
 
   addEmployee(name: string) {
@@ -44,6 +59,7 @@ class AccountingDepartment extends Department {
 
   addReport(text: string) {
     this.reports.push(text);
+    this.lastReport = text;
   }
 
   printReports() {
@@ -60,6 +76,9 @@ const accounting = new ITDepartment(["Max"]);
 accounting.addEmployee("Maruf");
 accounting.addEmployee("Shihab");
 accounting.addEmployee("Niloy");
+
+//Using Static Method
+const employee1 = Department.createEmployee("Shohag");
 
 accounting.printEmployeeInformation();
 console.log(accounting);
